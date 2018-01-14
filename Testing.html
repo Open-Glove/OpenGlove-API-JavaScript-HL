@@ -1,0 +1,45 @@
+<html>
+ <head>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <script
+			  src="https://code.jquery.com/jquery-3.1.1.min.js"
+			  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+			  crossorigin="anonymous"></script>
+    <script src="public/OpenGloveAPI.js"></script>
+
+   <script type="text/javascript">
+       $(document).ready(
+         function(){
+           var selectedGlove;
+           GetGloves().done(function(gloves){
+             // Activate(gloves[0], HandRegion.PalmarFingerIndexDistal, 0);
+            for(var g in gloves){
+              console.log(gloves[g]);
+              if(gloves[g].Port=="COM4"){
+                selectedGlove = gloves[g];
+              }
+            }
+            console.log('Se ha conectado el guante '+selectedGlove.Port);
+            startCaptureData(selectedGlove);
+            var data = getDataReceiver(selectedGlove);
+            data.fingersFunction = function(region,value){
+              if(region==FlexorRegion.IndexInterphalangealJoint){
+                if(value>50){
+                  console.log('Index Interphalangeal Joint > 50!!!');
+                }
+                //console.log(region+' -- '+value);
+              }
+
+            }
+            // ActivateMany(gloves[0], [0, 1, 2], [255, 255, 255]);
+           })
+         }
+       );
+    </script>
+ </head>
+<body>
+  <div>
+</div>
+
+</body>
+</html>
