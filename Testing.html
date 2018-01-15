@@ -1,6 +1,7 @@
 <html>
  <head>
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <link rel="stylesheet" type="text/css" href="style.css">
    <script
 			  src="https://code.jquery.com/jquery-3.1.1.min.js"
 			  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
@@ -24,8 +25,12 @@
             var data = getDataReceiver(selectedGlove);
             data.fingersFunction = function(region,value){
               if(region==FlexorRegion.IndexInterphalangealJoint){
+                move(value);
                 if(value>50){
                   console.log('Index Interphalangeal Joint > 50!!!');
+                  document.getElementById("warning").innerHTML="Index Interphalangeal Joint > 50!!!";
+                }else{
+                  document.getElementById("warning").innerHTML="";
                 }
                 //console.log(region+' -- '+value);
               }
@@ -34,12 +39,28 @@
             // ActivateMany(gloves[0], [0, 1, 2], [255, 255, 255]);
            })
          }
+
        );
+
+      function move(value) {
+        var elem = document.getElementById("myBar");
+        elem.style.width = value + '%';
+        elem.innerHTML = value * 1  + '%';
+      }
     </script>
+    <h1>OpenGlove API TEST</h1>
  </head>
 <body>
+  <div id="myProgress">
+    <h3>Index Interphalangeal Joint</h3>
+    <div id="myBar">0%</div>
+    <br>
+    <span id="warning">  </span>
+  </div>
+  <br>
+  <button onclick="move()">Click Me</button>
   <div>
-</div>
+  </div>
 
 </body>
 </html>
