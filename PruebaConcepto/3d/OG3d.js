@@ -32,7 +32,6 @@ function startCaptureData(glove){
     switch(values[0]){
       case 'f':
       //  console.log('Dato de flexor recibido en la región '+parseInt(values[1])+' y valor '+parseInt(values[2]));
-
         ws.fingersFunction(parseInt(values[1]),parseInt(values[2]));
         break;
       case 'a':

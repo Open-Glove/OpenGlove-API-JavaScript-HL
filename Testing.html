@@ -27,12 +27,10 @@
               if(region==FlexorRegion.IndexInterphalangealJoint){
                 move(value);
                 if(value>50){
-                  console.log('Index Interphalangeal Joint > 50!!!');
                   document.getElementById("warning").innerHTML="Index Interphalangeal Joint > 50!!!";
                 }else{
                   document.getElementById("warning").innerHTML="";
                 }
-                //console.log(region+' -- '+value);
               }
 
             }
@@ -58,7 +56,6 @@
     <span id="warning">  </span>
   </div>
   <br>
-  <button onclick="move()">Click Me</button>
   <div>
   </div>
 
