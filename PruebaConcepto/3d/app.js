@@ -5,6 +5,7 @@ var container, stats;
 var renderer, camera, scene;
 var mesh;
 var group;
+var quaternion;
 
 var effectController;
 var startingAngle = 0.01;
@@ -59,9 +60,11 @@ animate();
 * Render the objects in the scene
 */
 function drawScene(){
-
 	group = new THREE.Object3D();
+
 	group.position.set( 0,0,0 );
+
+  group.rotation.order = "YXZ";
 
 	//Draw the palm of the hand
 	var handMesh = drawModel(handP1, handP2, material);
@@ -285,15 +288,66 @@ function moveFinger(flex,value){
 	renderer.render( scene, camera );
 }
 
-function rotateOpenGlove(AcX){
-	//group.rotation.y = gyroX;
-	if(AcX>0){
-		frameDelta -= clock.getDelta();
-	}else{
-		frameDelta += clock.getDelta();
+var lastValueX = 0;
+var	lastValueY=0;
+var	lastValueZ=0;
+var precision = 0.05;
+var frameDelta2 = 0;
+
+function rotateOpenGlove(GcX, GcY, GcZ){
+
+	if(GcX<=lastValueX-precision || GcX>=lastValueX+precision){
+			lastValueX=GcX;
 	}
-	group.rotation.y = frameDelta;
+	if(GcY<=lastValueY-precision || GcY>=lastValueY+precision){
+		lastValueY=GcY;
+	}
+	if(GcZ<=lastValueZ-precision || GcZ>=lastValueZ+precision){
+		lastValueZ=GcZ;
+	}
+	group.quaternion.setFromEuler(new THREE.Euler(lastValueY, lastValueZ, 0,"ZYX"));
 	renderer.render( scene, camera );
+}
+
+var GcXX=0;
+var GcYY=0;
+var GcZZ=0;
+
+function rotateOpenGloveByGyro(GcX, GcY, GcZ){
+	console.log(" "+GcX+ " "+GcY+" "+GcZ);
+	
+	if(GcX<-25){
+		GcXX=GcXX-0.1;
+		group.rotation.x=-GcXX;
+		console.log(">>");
+	}
+	if(GcX>25){
+		GcXX=GcXX+0.1;
+		group.rotation.x=-GcXX;
+		console.log("<<");
+	}
+	
+	if(GcY<-25){
+		GcYY=GcYY+0.1;
+		group.rotation.y=GcYY;
+		console.log(">>");
+	}
+	if(GcY>25){
+		GcYY=GcYY-0.1;
+		group.rotation.y=GcYY;
+		console.log("<<");
+	}	
+
+/*	if(GcY<0.4){
+		GcYY=GcYY+0.1;
+		group.rotation.x=GcYY;
+		console.log("UP");
+	}
+	if(GcY>-0.4){
+		GcYY=GcYY-0.1;
+		group.rotation.x=GcYY;
+		console.log("DOWN");
+	}*/
 }
 
 function animate() {
@@ -307,26 +361,6 @@ function animate() {
 		//console.log(group.rotation.y);
 	}
 
-	//Fingers Rotation
-	//finger1Falange[0].rotation.x = effectController.finger1Phalanges0;
-
-
-/*
-	finger2Falange[1].rotation.x = effectController.finger2Phalanges1;
-	finger2Falange[2].rotation.x = effectController.finger2Phalanges2;
-
-	finger3Falange[0].rotation.x = effectController.finger3Phalanges0;
-	finger3Falange[1].rotation.x = effectController.finger3Phalanges1;
-	finger3Falange[2].rotation.x = effectController.finger3Phalanges2;
-
-	finger4Falange[0].rotation.x = effectController.finger4Phalanges0;
-	finger4Falange[1].rotation.x = effectController.finger4Phalanges1;
-	finger4Falange[2].rotation.x = effectController.finger4Phalanges2;
-
-	finger5Falange[0].rotation.y = effectController.finger5Phalanges0;
-	finger5Falange[1].rotation.x = effectController.finger5Phalanges1;
-	finger5Falange[2].rotation.x = effectController.finger5Phalanges2;
-*/
 	//updates fps counter
 	stats.update();
 
@@ -388,4 +422,5 @@ function setupGui() {
 	h.add( effectController, "finger5Phalanges0", minCloseAngle, maxCloseAngle, closeAngleStep ).name("Phalanx 1");
 	h.add( effectController, "finger5Phalanges1", minCloseAngle, maxCloseAngle, closeAngleStep ).name("Phalanx 2");
 	h.add( effectController, "finger5Phalanges2", minCloseAngle, maxCloseAngle, closeAngleStep ).name("Phalanx 3");
+
 }

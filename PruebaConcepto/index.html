@@ -102,6 +102,7 @@
                   startCaptureData(selectedGlove);
                   moveFingers();
                   rotateHand();
+                  rotateHandByGyro();
                }
              }
             }
@@ -141,11 +142,17 @@
 
             function rotateHand(){
               var data = getDataReceiver(selectedGlove);
-              data.imu_ValuesFunction = function(ax,ay,az,gx,gy,gz,mx,my,mz){
-                rotateOpenGlove(ax);
-                console.log(ax);
-
+              data.imu_attitudeFunction = function(rx,ry,rz){
+                rotateOpenGlove(rx,ry,rz);
+              //  rotateOpenGloveZ(gz);
               }
+            }
+
+            function rotateHandByGyro(){
+            	var data = getDataReceiver(selectedGlove);
+            	data.imu_ValuesFunction = function(ax,ay,az,gx,gy,gz,mx,my,mz){
+            		rotateOpenGloveByGyro(gx,gy,gz);
+            	}
             }
 
 
@@ -197,12 +204,14 @@
       <div class="container">
         <div class="row">
           <div class="col-md-4 mb-5 mb-lg-0">
-            <h4 class="text-uppercase mb-4">Location</h4>
-            <p class="lead mb-0">2215 John Daniel Drive
-              <br>Clark, MO 65243</p>
+            <h4 class="text-uppercase mb-4"></h4>
+            <h4 class="text-uppercase mb-4">Comienza ahora</h4>
+            <p class="lead mb-0">Visita la página oficial de OpenGlove y comienza a armar tu propio guante 
+              <a href="http://www.openglove.cl"> presionando aquí</a>.</p>
+            
           </div>
           <div class="col-md-4 mb-5 mb-lg-0">
-            <h4 class="text-uppercase mb-4">Around the Web</h4>
+            <h4 class="text-uppercase mb-4">OpenGlove</h4>
             <ul class="list-inline mb-0">
               <li class="list-inline-item">
                 <a class="btn btn-outline-light btn-social text-center rounded-circle" href="#">
@@ -232,9 +241,8 @@
             </ul>
           </div>
           <div class="col-md-4">
-            <h4 class="text-uppercase mb-4">About Freelancer</h4>
-            <p class="lead mb-0">Freelance is a free to use, open source Bootstrap theme created by
-              <a href="http://startbootstrap.com">Start Bootstrap</a>.</p>
+            <p class="lead mb-0"> Grupo InTEracTIon 
+              <br> Visita también la <a href="http://interaction.informatica.usach.cl/projects.html">página oficial del grupo InTEracTIon</a>, en dónde podras encontrar proyectos del mismo grupo de investigación de OpenGlove </p>
           </div>
         </div>
       </div>
@@ -242,7 +250,7 @@
 
     <div class="copyright py-4 text-center text-white">
       <div class="container">
-        <small>Copyright &copy; Your Website 2018</small>
+        <small>Copyright &copy; OpenGlove 2018</small>
       </div>
     </div>
 

@@ -18,6 +18,7 @@ function startCaptureData(glove){
   ws.accelerometerFunction = function(ax,ay,az){}
   ws.gyroscopeFunction = function(gx,gy,gz){}
   ws.magnometerFunction = function(mx,my,mz){}
+  ws.imu_attitudeFunction = function(rx,ry,rz){}
   ws.imu_ValuesFunction = function(ax,ay,az,gx,gy,gz,mx,my,mz){}
   ws.Port = glove.Port;
   ws.WebSocketPort= glove.WebSocketPort;
@@ -43,6 +44,9 @@ function startCaptureData(glove){
       case 'm':
         ws.magnometerFunction(parseFloat(values[1]),parseFloat(values[2]),parseFloat(values[3]));
         break;
+      case 'r':
+          ws.imu_attitudeFunction(parseFloat(values[1]),parseFloat(values[2]),parseFloat(values[3]));
+          break;
       case 'z':
         ws.imu_ValuesFunction(parseFloat(values[1]),parseFloat(values[2]),parseFloat(values[3]), parseFloat(values[4]),parseFloat(values[5]),parseFloat(values[6]), parseFloat(values[7]),parseFloat(values[8]),parseFloat(values[9]));
         break;
