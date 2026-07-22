@@ -19,6 +19,9 @@ function startCaptureData(glove){
   ws.gyroscopeFunction = function(gx,gy,gz){}
   ws.magnometerFunction = function(mx,my,mz){}
   ws.imu_ValuesFunction = function(ax,ay,az,gx,gy,gz,mx,my,mz){}
+  ws.quaternionFunction = function(qx,qy,qz){}
+  /** Brazo + antebrazo: Q,w1,x1,y1,z1,w2,x2,y2,z2 */
+  ws.dualQuaternionFunction = function(w1,x1,y1,z1,w2,x2,y2,z2){}
   ws.Port = glove.Port;
   ws.WebSocketPort= glove.WebSocketPort;
   ws.onopen = function()
@@ -46,6 +49,17 @@ function startCaptureData(glove){
         break;
       case 'z':
         ws.imu_ValuesFunction(parseFloat(values[1]),parseFloat(values[2]),parseFloat(values[3]), parseFloat(values[4]),parseFloat(values[5]),parseFloat(values[6]), parseFloat(values[7]),parseFloat(values[8]),parseFloat(values[9]));
+        break;
+      case 'q':
+        ws.quaternionFunction(parseFloat(values[1]),parseFloat(values[2]),parseFloat(values[3]));
+        break;
+      case 'Q':
+        if (values.length === 9) {
+          ws.dualQuaternionFunction(
+            parseFloat(values[1]), parseFloat(values[2]), parseFloat(values[3]), parseFloat(values[4]),
+            parseFloat(values[5]), parseFloat(values[6]), parseFloat(values[7]), parseFloat(values[8])
+          );
+        }
         break;
       default:
     }
